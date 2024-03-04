@@ -117,7 +117,11 @@ def refresh_git_submodule(name,subrepo_info):
   sys.stderr.buffer.write(
     b"Adding/updating submodule %s, revision %s\n" % (name, subrepo_info[1])
   )
-  return b'[submodule "%s"]\n\tpath = %s\n\turl = %s\n' % (name, name, subrepo_info[0])
+  if name in submodule_mappings:
+    url = submodule_mappings[name]
+  else:
+    url = subrepo_info[0]
+  return b'[submodule "%s"]\n\tpath = %s\n\turl = %s\n' % (name, name, url)
 
 def refresh_hg_submodule(name,subrepo_info):
   gitRepoLocation=submodule_mappings[name] + b"/.git"
